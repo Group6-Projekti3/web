@@ -9,5 +9,9 @@ app.config(function($routeProvider) {
 	.when("/home", {
         templateUrl : "home.html",
 	    controller : "homeCtrl"
+    })
+	.when("/stats", {
+        templateUrl : "stats.html",
+	    controller : "statsCtrl"
     });
 });

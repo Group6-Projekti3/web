@@ -15,16 +15,40 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	
 	<script src="script/mainApp.js"></script>
+	<script src="script/indexCtrl.js"></script>
 	<script src="script/loginCtrl.js"></script>
 	<script src="script/homeCtrl.js"></script>
+	<script src="script/statsCtrl.js"></script>
 	
 	<title>Group 6</title>
 </head>
 
 <body>
-<div ng-app="mainApp">
+<div ng-app="mainApp" ng-controller="indexCtrl">
 	
 	<div ng-view></div>
+	
+	<!-- Help Modal-->
+	<div class="modal fade" id="helpModal" role="dialog">
+		<div class="modal-dialog">
+    
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Help</h4>
+				</div>
+			
+				<div class="modal-body">
+					<p>{{helpText}}</p>					
+				</div>
+				
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Sulje</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 </div>
 </body>
