@@ -1,5 +1,5 @@
 <?php
-	/*
+	
 	session_start();
 	session_unset();
 
@@ -10,56 +10,47 @@
 		$postdata = file_get_contents("php://input");
 		$request = json_decode($postdata);
 
-		$kt = $request->kt;
-		$pw = $request->salasana;
+		$username = $request->username;
+		$pw = $request->password;
+		
+		$resp = [];
 
-		$success = false;
-
-		if ($kt != "" && $pw != "") {
+		if ($username != "" && $pw != "") {
 			$query = $conn->prepare("SELECT * 
-									FROM admin
-									WHERE username=?");
-			$query->bind_param("s", $kt);
-			$query->execute();
+									FROM user
+									WHERE username = BINARY ?");
+			$query->bind_param("s", $username);
 			
-			$result = $query->get_result();
-			
-			if (mysqli_num_rows($result) != 1) {
-				echo "Väärä määrä rivejä!";
-			} else {
+			if ($query->execute()) {
+				
+				$result = $query->get_result();
 				$row = $result->fetch_assoc();
 				
 				$id = $row["id"];
-				$domain = $row["domain_id"];
 				$pwfromdb = $row["password"];
+				$type = $row["type"];
 				
-				if ($pwfromdb == $pw) {
+				if (password_verify($pw, $pwfromdb)) {
 					
 					$_SESSION["user"] = [
 						"id" => $id,
-						"username" => $kt,
-						"domain" => $domain
+						"username" => $username,
+						"type" => $type
 					];
 					
-					$success = true;
+					$resp["code"] = 0;
+					$resp["username"] = $username;
+					$resp["type"] = $type;
+					
+				} else {
+					$resp["code"] = 1;
 				}
+				
+			} else {
+				$resp["code"] = -2;
 			}
 		}
-
-		$resp = [];
-
-		if ($success) {
-
-			$resp["code"] = 0;
-			$resp["domain"] = $domain;
-			$resp["username"] = $kt;
-			
-		} else {
-			
-			$resp["code"] = 1;
-			
-		}
-
+		
 	} catch (Exception $e) {
 		// Unknown php-error
 		$resp = [];
@@ -67,8 +58,5 @@
 	}
 
 	echo json_encode($resp);
-	*/
-	$resp = [];
-	$resp["code"] = 0;
-	echo json_encode($resp);
+
 ?>
