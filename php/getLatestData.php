@@ -35,7 +35,7 @@
 				$entry = (object) [
 					'id' => $row["sensor_id"],
 					'time' => $row["time"],
-					'raw data' => $row["raw_data"],
+					'raw_data' => $row["raw_data"],
 					'plot_value' => $row["plot_value"],
 					'plot_label' => $row["plot_label"],
 					'battery' => $row["battery"],
