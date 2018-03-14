@@ -14,6 +14,7 @@
 			<ul class="nav navbar-nav">
 				<li class="active"><a href="#/home"><i class="glyphicon glyphicon-home"></i></a></li>
 				<li><a href="#/stats"><i class="glyphicon glyphicon-stats"></i></a></li>
+				<li><a href="#/users"><i class="glyphicon glyphicon-user"></i></a></li>
 				<!--<li><a href="#/new"><i class="glyphicon glyphicon-plus"></i></a></li>
 				<li><a href="#/results"><i class="glyphicon glyphicon-search"></i></a></li>
 				<li><a href="#/settings"><i class="glyphicon glyphicon-cog"></i></a></li>-->
@@ -31,7 +32,69 @@
 <div class="container" style="margin-top:50px">
 
 	<div class="well">
-		<h4>Etusivu</h4>
+		
+		<h3>Viimeisin Data:</h3>
+		
+		<div class="table-responsive">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>Sensorin ID:</th>
+						<th>Nimi:</th>
+						<th>Akku ja signaali:</th>
+						<th>Tyyppi:</th>
+						<th>Arvo:</th>
+						<th>Raaka:</th>
+						<th>Aika:</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="x in latestData">
+						<td>{{x.data.id}}</td>
+						<td>{{x.sensor.label}}</td>
+						<td>
+							<div class="progress" style="margin-bottom:3px;">
+								<div class="progress-bar {{x.data.battery < 30 ? 'progress-bar-danger' : x.data.battery < 60 ? 'progress-bar-warning' : 'progress-bar-success'}}" role="progressbar" ng-style="{width: (x.data.battery) + '%'}">
+								  {{x.data.battery}} %
+								</div></div>
+							<div class="progress" style="margin-bottom:0px;">
+								<div class="progress-bar" role="progressbar" ng-style="{width: (x.data.signal) + '%'}">
+								  {{x.data.signal}} %
+								</div>
+							</div>
+						</td>
+						<td>{{x.data.plot_label}}</td>
+						<td>{{x.data.plot_value}}</td>
+						<td>{{x.data.raw_data}}</td>
+						<td>{{x.data.time}}</td>
+					</tr>
+				</tbody>
+			
+			</table>
+		</div>
 	</div>
-	  
+	
+	<div class="well">
+		
+		<h3>Kaikki Sensorit:</h3>
+		
+		<div class="table-responsive">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>ID:</th>
+						<th>Nimi:</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="y in sensors">
+						<td>{{y.id}}</td>
+						<td>{{y.name}}</td>
+					</tr>
+				</tbody>
+			
+			</table>
+		</div>
+	</div>
+
 </div>
