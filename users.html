@@ -1,0 +1,150 @@
+
+<!-- Navbar -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="#/home">Hitsisofta - Group 6</a>
+		</div>
+		<div class="collapse navbar-collapse" id="myNavbar">
+			<ul class="nav navbar-nav">
+				<li><a href="#/home"><i class="glyphicon glyphicon-home"></i></a></li>
+				<li><a href="#/stats"><i class="glyphicon glyphicon-stats"></i></a></li>
+				<li class="active"><a href="#/users"><i class="glyphicon glyphicon-user"></i></a></li>
+				<!--<li><a href="#/new"><i class="glyphicon glyphicon-plus"></i></a></li>
+				<li><a href="#/results"><i class="glyphicon glyphicon-search"></i></a></li>
+				<li><a href="#/settings"><i class="glyphicon glyphicon-cog"></i></a></li>-->
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a data-toggle="modal" data-target="#helpModal"><i class="glyphicon glyphicon-question-sign"></i></a></li>
+				<li><a href="php/logout.php"><i class="glyphicon glyphicon-log-out"></i></a></li>
+			</ul>
+		</div>
+	</div>
+</nav>
+
+<br>
+
+<!-- Page content-->
+<div class="container" style="margin-top:50px">
+
+	<div class="well">
+		<h3>Omat tiedot:</h3>
+		<h4>Käyttäjätunnus: {{me.name}}</h4>
+		<h4>Tyyppi: {{getType(me.type)}}</h4>
+		
+		<button class="btn btn-block btn-primary" data-toggle="modal" data-target="#changePasswordModal" ng-click="initVar()">Vaihda salasana</button>
+	</div>
+	
+	<div class="well" ng-show="me.type == 0">
+		<h3>Käyttäjien hallinta:</h3>
+		
+		<div class="table-responsive" ng-hide="users.length == 0">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>Nimi:</th>
+						<th>Tyyppi:</th>
+						<th>Toiminnot:</th>
+					</tr>
+				</thead>
+				
+				<tbody>
+					<tr ng-repeat="x in users">
+						<td>{{x.name}}</td>
+						<td>{{getType(x.type)}}</td>
+						<td align="right">
+							<button type="button" title="Muokkaa" class="btn btn-primary btn-sm"><i class="glyphicon glyphicon-wrench"></i></button>
+							<button type="button" title="Poista" class="btn btn-danger btn-sm"><i class="glyphicon glyphicon-trash"></i></button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		
+		<button class="btn btn-block btn-primary" data-toggle="modal" data-target="#newUserModal" ng-click="initVar()">Lisää käyttäjä</button>
+	</div>
+
+</div>
+
+<!-- Change Password Modal-->
+<div class="modal fade" id="changePasswordModal" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Salasanan vaihto</h4>
+			</div>
+			
+			<div class="modal-body">
+				<form>
+					<input type="password" class="form-control" placeholder="Vanha Salasana" ng-model="oldPassword">
+					<br>
+					<input type="password" class="form-control" placeholder="Uusi Salasana" ng-model="newPassword">
+					<input type="password" class="form-control" placeholder="Vahvista" ng-model="confirmPassword">
+				</form>
+			</div>
+			
+			<div class="modal-footer">
+				<button type="button" class="btn" data-dismiss="modal">Peruuta</button>
+				<button type="button" class="btn btn-primary" ng-click="changePw()" ng-show="newPassword == confirmPassword && newPassword.length > 4 && oldPassword.length > 4 && newPassword != oldPassword">Vaihda</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- New User Modal-->
+<div class="modal fade" id="newUserModal" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Lisää käyttäjä</h4>
+			</div>
+			
+			<div class="modal-body">
+				<form>
+				
+					<div class="input-group">
+						<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+						<input type="text" class="form-control" placeholder="Käyttäjänimi" ng-model="newUsername">
+					</div>
+					
+					<br>
+					
+					<div class="well">
+						<h4>Tyyppi:</h4>
+						
+						<div ng-repeat="y in types">
+							<input type="radio" ng-model="$parent.newUserType" ng-value="y.id">{{y.name}}
+						</div>
+					</div>
+					
+					<div class="input-group">
+						<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+						<input type="password" class="form-control" placeholder="Salasana" ng-model="newUsersPassword">
+					</div>
+					
+					<div class="input-group">
+						<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+						<input type="password" class="form-control" placeholder="Vahvista" ng-model="confirmNewUsersPassword">
+					</div>
+					
+				</form>
+			</div>
+			
+			<div class="modal-footer">
+				<button type="button" class="btn" data-dismiss="modal">Peruuta</button>
+				<button type="button" class="btn btn-primary" ng-click="addUser()" ng-show="newUsersPassword == confirmNewUsersPassword && newUsersPassword.length > 4 && newUsername.length > 2">Lisää</button>
+			</div>
+		</div>
+	</div>
+</div>
