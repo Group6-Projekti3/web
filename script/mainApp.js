@@ -13,5 +13,9 @@ app.config(function($routeProvider) {
 	.when("/stats", {
         templateUrl : "stats.html",
 	    controller : "statsCtrl"
+    })
+	.when("/users", {
+        templateUrl : "users.html",
+	    controller : "usersCtrl"
     });
 });
