@@ -17,7 +17,7 @@
 			
 			$query = $conn->prepare("SELECT *
 									FROM sensor_data
-									WHERE sensor_id = ? AND time BETWEEN ? AND ?");
+									WHERE sensor_id = ? AND time BETWEEN FROM_UNIXTIME(?) AND FROM_UNIXTIME(?)");
 					
 			$query->bind_param("iss", $sensor, $start, $end);
 			$query->execute();
