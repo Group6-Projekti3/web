@@ -56,9 +56,14 @@
 				</select>
 			</div>
 			
-			<div class="form-group">
-				<input type="date" ng-hide="hideDatepickerU" ng-model="startdate" />
-				<input type="date" ng-hide="hideDatepickerL" ng-model="enddate" />
+			<div class="form-group" ng-hide="hideDatepickerU">
+				<label>Alkamispvm:</label>
+				<input type="date" class="form-control" ng-model="starttime">
+			</div>
+			
+			<div class="form-group" ng-hide="hideDatepickerL">
+				<label>Loppumispvm:</label>
+				<input type="date" class="form-control" ng-model="endtime">
 			</div>
 		
 			<br>
