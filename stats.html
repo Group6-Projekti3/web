@@ -1,4 +1,3 @@
-
 <nav class="navbar navbar-inverse navbar-fixed-top">
 	<div class="container-fluid">
 		<div class="navbar-header">
@@ -48,12 +47,16 @@
 			
 			<div class="form-group">
 			
-				<select class="custom-select" id="inputGroupSelect01" ng-model="timeGetType" ng-click="enableButton()">
+				<select class="custom-select" id="inputGroupSelect01" ng-model="timeGetOpt" ng-click="enableButton()">
 					<option value="1">Vuorokauden alusta lähtien</option>
 					<option value="2">Viikon alusta lähtien</option>
 					<option value="3">Viime viikko</option>
 					<option value="4">Valitse alkamispäivämäärä...</option>
 					<option value="5">Valitse alkamis- ja loppumispäivämäärät...</option>
+					
+					<!-- POISTA -->
+					<option value="0">Piirrä esimerkkigraafi [valitse anturi 1] (POISTA!)</option>
+					<!-- POISTA -->
 				</select>
 			</div>
 			
