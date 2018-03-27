@@ -38,7 +38,6 @@ app.controller("statsCtrl", function ($scope, $window, $http, $location){
 			
 			// Today
 			case 1:
-				alert("tänää");
 				// Start
 				$scope.starttime = new Date();
 				$scope.starttime.setHours(0);
@@ -55,7 +54,6 @@ app.controller("statsCtrl", function ($scope, $window, $http, $location){
 			
 			// This week
 			case 2:
-			alert("täl viikol");
 				// Start
 				$scope.starttime = new Date();
 				$scope.starttime.setDate($scope.starttime.getDate() - 1);
@@ -74,7 +72,6 @@ app.controller("statsCtrl", function ($scope, $window, $http, $location){
 			
 			// Last week
 			case 3:
-			alert("viime viikol");
 				// Start
 				$scope.starttime = new Date();
 				$scope.starttime.setDate($scope.starttime.getDate() - 8);
@@ -97,7 +94,6 @@ app.controller("statsCtrl", function ($scope, $window, $http, $location){
 			
 			// Since
 			case 4:
-				alert("since");
 				// End
 				$scope.endtime = new Date();
 				$scope.endtime.setSeconds(0);
