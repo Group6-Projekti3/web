@@ -1,20 +1,220 @@
 app.controller("statsCtrl", function ($scope, $window, $http, $location){
 	
 	$scope.starttime = new Date();
+	$scope.starttime.setDate($scope.starttime.getDate() - 1);
+	$scope.starttime.setDate($scope.starttime.getDate() - $scope.starttime.getDay() + 1);
+	$scope.starttime.setHours(0);
+	$scope.starttime.setMinutes(0);
+	$scope.starttime.setSeconds(0);
+	$scope.starttime.setMilliseconds(0);
+	
 	$scope.endtime = new Date();
-	$scope.sensor = 0;
+	$scope.endtime.setSeconds(0);
+	$scope.endtime.setMilliseconds(0);
+	
 	$scope.errorOccurred = true;
+	$scope.timespanSelection = 0;
+	$scope.sensorsSelected = false;
+
+	$scope.sensorData = [];
+	$scope.charts = [];
 	
-	$scope.timeGetOpt = 0;
+	/* --- function definitions --- */
 	
-	$scope.hideButton = true;
-	$scope.hideCanvas = true;
-	$scope.hideDatepickerU = true;
-	$scope.hideDatepickerL = true;
+	function findIndex(label) {
+		for (var i = 0; i < $scope.sensorData.length; i++) {
+			if ($scope.sensorData[i].label.label == label) {
+				return i;
+			}
+		}
+		
+		return -1;
+	}
 	
-	// POISTA!
-	$scope.debugString = "";
-	// POISTA!
+	$scope.setDates = function() {
+		
+		switch(parseInt($scope.timespanSelection)) {
+			
+			
+			// Today
+			case 1:
+				alert("tänää");
+				// Start
+				$scope.starttime = new Date();
+				$scope.starttime.setHours(0);
+				$scope.starttime.setMinutes(0);
+				$scope.starttime.setSeconds(0);
+				$scope.starttime.setMilliseconds(0);
+				
+				// End
+				$scope.endtime = new Date();
+				$scope.endtime.setSeconds(0);
+				$scope.endtime.setMilliseconds(0);
+				
+				break;
+			
+			// This week
+			case 2:
+			alert("täl viikol");
+				// Start
+				$scope.starttime = new Date();
+				$scope.starttime.setDate($scope.starttime.getDate() - 1);
+				$scope.starttime.setDate($scope.starttime.getDate() - $scope.starttime.getDay() + 1);
+				$scope.starttime.setHours(0);
+				$scope.starttime.setMinutes(0);
+				$scope.starttime.setSeconds(0);
+				$scope.starttime.setMilliseconds(0);
+				
+				// End
+				$scope.endtime = new Date();
+				$scope.endtime.setSeconds(0);
+				$scope.endtime.setMilliseconds(0);
+				
+				break;
+			
+			// Last week
+			case 3:
+			alert("viime viikol");
+				// Start
+				$scope.starttime = new Date();
+				$scope.starttime.setDate($scope.starttime.getDate() - 8);
+				$scope.starttime.setDate($scope.starttime.getDate() - $scope.starttime.getDay() + 1);
+				$scope.starttime.setHours(0);
+				$scope.starttime.setMinutes(0);
+				$scope.starttime.setSeconds(0);
+				$scope.starttime.setMilliseconds(0);
+				
+				// End
+				$scope.endtime = new Date();
+				$scope.endtime.setDate($scope.endtime.getDate() - 1);
+				$scope.endtime.setDate($scope.endtime.getDate() - $scope.starttime.getDay() + 1);
+				$scope.endtime.setHours(0);
+				$scope.endtime.setMinutes(0);
+				$scope.endtime.setSeconds(0);
+				$scope.endtime.setMilliseconds(0);
+				
+				break;
+			
+			// Since
+			case 4:
+				alert("since");
+				// End
+				$scope.endtime = new Date();
+				$scope.endtime.setSeconds(0);
+				$scope.endtime.setMilliseconds(0);
+				
+				break;
+		}
+	}
+	
+	$scope.getData = function() {
+		
+		for (var i = 0; i < $scope.sensors.length; i++) {
+			
+			$scope.sensorData = [];
+			
+			if ($scope.sensors[i].selected) {
+				
+				var sensor = $scope.sensors[i];
+				
+				var data = {
+					'sensor' : sensor.id,
+					'starttime' : Math.floor($scope.starttime.getTime() / 1000),
+					'endtime' : Math.floor($scope.endtime.getTime() / 1000)
+				};
+				
+				$http.post("php/getData.php", data).then(function(response){
+					if (response.data.code == 0) {
+						
+						var entry = {
+							'label' : response.data.label,
+							'data' : response.data.data,
+							'drawn' : false
+						};
+						
+						$scope.sensorData.push(entry);
+					}
+				});
+			}
+		}
+	};
+	
+	$scope.drawCharts = function() {
+		
+		$scope.charts = [];
+		
+		var canvases = document.getElementsByClassName("chartCanvas");
+		
+		for (var i = 0; i < $scope.sensorData.length; i++) {
+			
+			var data = $scope.sensorData[i];
+			
+			var ctx = canvases[i].getContext('2d');
+			var myChart1 = new Chart(ctx, {
+				type: 'line',
+				data: {
+					datasets: [{
+						
+						fill: false,
+						borderColor: 'rgba(0, 0, 255, 0.5)',
+						backgroundColor: 'rgba(0, 0, 255, 0.5)',
+						label: data.label.label,
+						data: data.data,
+						pointRadius: 1,
+						lineTension: 0
+					}]
+				},
+				options: {
+					scales: {
+						xAxes: [{
+							type: 'time',
+						}]
+					}
+				}
+			});
+			
+			$scope.charts.push(myChart1);
+		}
+	}
+	
+	$scope.drawChart = function(x) {
+		x.drawn = true;
+		
+		var canvases = document.getElementsByClassName("chartCanvas");
+		
+		var index = findIndex(x.label.label);
+		
+		if (index != -1) {
+			
+			var ctx = canvases[index].getContext('2d');
+			var myChart1 = new Chart(ctx, {
+				type: 'line',
+				data: {
+					datasets: [{
+						
+						fill: false,
+						borderColor: 'rgba(0, 0, 255, 0.5)',
+						backgroundColor: 'rgba(0, 0, 255, 0.5)',
+						label: x.label.label,
+						data: x.data,
+						pointRadius: 1,
+						lineTension: 0
+					}]
+				},
+				options: {
+					scales: {
+						xAxes: [{
+							type: 'time',
+						}]
+					}
+				}
+			});
+			
+			$scope.charts.push(myChart1);
+		}
+	}
+	
+	/*
 	
 	$scope.getdata = function() {
 		
@@ -192,15 +392,31 @@ app.controller("statsCtrl", function ($scope, $window, $http, $location){
 		resetDate();
 	};
 	
+	*/
+	// ---- ---- ---- //
+	
+	// Check if user has selected any sensors
+	$scope.checkSelectedSensors = function() {
+		$scope.sensorsSelected = false;
+		
+		for (var i = 0; i < $scope.sensors.length; i++) {
+			if ($scope.sensors[i]["selected"] == true) {
+				$scope.sensorsSelected = true;
+			}
+		}
+	};
+	
+	// --- Instructions to be executed on load: ---
+	
+	// Get list of sensors in DB
 	$http.post("php/getSensors.php").then(function(response){
 		if (response.data.code == 0) {
 			$scope.errorOccurred = true;
 			$scope.showAikavali = false;
 			$scope.sensors = response.data.sensors;
 			
-			$scope.selectedSensors = { ids: { } };
 			for (var i = 0; i < $scope.sensors.length; i++) {
-				$scope.selectedSensors.ids[$scope.sensors[i].id] = false;
+				$scope.sensors[i]["selected"] = false;
 			}
 			
 		}
@@ -210,41 +426,5 @@ app.controller("statsCtrl", function ($scope, $window, $http, $location){
 		}			
 	});
 	
-	function resetDate() {
-		var reset = new Date();
-	}
-	
-	function selectedSensorNum() {
-		var num = 0;
-		for (var i = 0; i < Object.keys($scope.selectedSensors.ids).length; i++) {
-			if ($scope.selectedSensors.ids[i] == true) { 
-				num++;
-			}
-		}
-		return num;
-	}
-	
-	$scope.enableButton = function() {
-		var selectedValue = inputGroupSelect01.options[inputGroupSelect01.selectedIndex].value
-		if (selectedValue > -1) {
-			$scope.hideButton = false;
-		}
-		else {
-			$scope.hideButton = true;
-		}
-		if (selectedValue == 4) {
-			$scope.hideDatepickerU = false;
-			$scope.hideDatepickerL = true;
-		}
-		
-		else if (selectedValue == 5) {
-			$scope.hideDatepickerU = false;
-			$scope.hideDatepickerL = false;
-		}
-		
-		else {
-			$scope.hideDatepickerU = true;
-			$scope.hideDatepickerL = true;
-		}
-	}	
+
 });
