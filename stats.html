@@ -30,11 +30,76 @@
 <div class="container" style="margin-top:50px">
 
 	<div class="well">
-		<h4>Stats</h4><br />
 		
-		<div ng-app="mainApp" ng-controller="statsCtrl" >
+		<label>Valitse sensorit:</label>
+		<div class="form-group" ng-repeat="x in sensors" ng-model="sensors">
+			<input type="checkbox" ng-model="sensors[$index].selected" ng-click="checkSelectedSensors()">
+			{{x.name}}
+		</div>
 		
-			<b>Valitse sensori(t):</b>
+		
+		<div class="form-group" ng-show="sensorsSelected">
+			<label>Valitse aikaväli:</label>
+			<select class="form-control" ng-model="timespanSelection" ng-click="enableButton()" ng-change="setDates()">
+				<option value="1">Tänään</option>
+				<option value="2">Tämä viikko</option>
+				<option value="3">Viime viikko</option>
+				<option value="4">Alkaen...</option>
+				<option value="5">Väliltä...</option>
+			</select>
+		</div>
+		
+		<div class="form-group" ng-show="timespanSelection > 3 && sensorsSelected">
+			
+			<label>Alku:</label>
+			
+			<div class="input-group">
+				<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+				<input type="date" class="form-control" ng-model="starttime">
+			</div>
+			
+			<div class="input-group">
+				<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+				<input type="time" class="form-control" ng-model="starttime">
+			</div>
+			
+		</div>
+		
+		<div class="form-group" ng-show="timespanSelection > 4 && sensorsSelected">
+			
+			<label>Loppu:</label>
+			
+			<div class="input-group">
+				<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+				<input type="date" class="form-control" ng-model="endtime">
+			</div>
+			
+			<div class="input-group">
+				<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+				<input type="time" class="form-control" ng-model="endtime">
+			</div>
+			
+		</div>
+	
+		<button ng-click="getData()" class="btn btn-block btn-primary" ng-show="(timespanSelection < 4 || starttime < endtime) && sensorsSelected && timespanSelection > 0">Hae</button>
+	
+	</div>
+	
+	<h3 ng-show="sensorData.length > 0">Löytynyt Data:</h3>
+	
+	<div class="well" ng-repeat="x in sensorData">
+		<h4>{{x.label.label}}</h4>
+		
+		<canvas class="chartCanvas" ng-show="x.drawn"></canvas>
+		
+		<button ng-click="drawChart(x)" class="btn btn-block btn-primary" ng-hide="x.drawn">Näytä kuvaaja</button>
+		
+	</div>
+
+</div>
+
+<!--
+<b>Valitse sensori(t):</b>
 			<br /><br />
 			<div class="form-group" ng-repeat="x in sensors" ng-model="sensors">
 				<input type="checkbox" value="x.id" ng-model="selectedSensors.ids[$index+1]" id="{{$index+1}}" />
@@ -54,9 +119,6 @@
 					<option value="4">Valitse alkamispäivämäärä...</option>
 					<option value="5">Valitse alkamis- ja loppumispäivämäärät...</option>
 					
-					<!-- POISTA -->
-					<option value="0">Piirrä esimerkkigraafi [valitse anturi 1] (POISTA!)</option>
-					<!-- POISTA -->
 				</select>
 			</div>
 			
@@ -78,12 +140,8 @@
 			<div class="alert alert-danger" ng-hide="errorOccurred"><center>{{ errorMessage }}</center></div>
 			
 			
-			<div class="form-group" ng-hide="hideCanvas">
+			<div ng-repeat="">
 				<h3>Käyrät</h3>
-				<canvas id="myChart1"></canvas>
-			</div>	
-		
-		</div>
-		
-	</div>
-</div>
+				<canvas class="chartCanvas"></canvas>
+			</div>
+-->
