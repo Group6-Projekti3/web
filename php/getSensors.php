@@ -10,7 +10,7 @@
 		
 		if (isset($_SESSION["user"])) {
 			
-			$query = $conn->prepare("SELECT id, name
+			$query = $conn->prepare("SELECT *
 					FROM sensor;");
 
 			$query->execute();
@@ -22,10 +22,14 @@
 			while ($row = $result->fetch_assoc()) {
 				$id = $row["id"];
 				$name = $row["name"];
+				$min = $row["min"];
+				$max = $row["max"];
 
 				$a = array (
 					"id" => $id,
 					"name" => $name,
+					"min" => $min,
+					"max" => $max
 				);
 				
 				array_push($arr, $a);
