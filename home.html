@@ -39,12 +39,12 @@
 			<table class="table table-striped">
 				<thead>
 					<tr>
-						<th>Sensorin ID:</th>
+						<th>ID:</th>
 						<th>Nimi:</th>
 						<th>Akku ja signaali:</th>
-						<th>Tyyppi:</th>
 						<th>Arvo:</th>
-						<th>Raaka:</th>
+						<th>Raakadata:</th>
+						<th>Yksikkö:</th>
 						<th>Aika:</th>
 					</tr>
 				</thead>
@@ -63,9 +63,9 @@
 								</div>
 							</div>
 						</td>
-						<td>{{x.data.plot_label}}</td>
 						<td>{{x.data.plot_value}}</td>
 						<td>{{x.data.raw_data}}</td>
+						<td>{{x.data.plot_label}}</td>
 						<td>{{x.data.time}}</td>
 					</tr>
 				</tbody>
@@ -84,12 +84,18 @@
 					<tr>
 						<th>ID:</th>
 						<th>Nimi:</th>
+						<th>Alaraja:</th>
+						<th>Yläraja:</th>
+						<th ng-hide="me.type > 1">Aseta Raja-Arvot:</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr ng-repeat="y in sensors">
-						<td>{{y.id}}</td>
-						<td>{{y.name}}</td>
+						<td class="col-md-1">{{y.id}}</td>
+						<td class="col-md-5">{{y.name}}</td>
+						<td class="col-md-2">{{y.min}}</td>
+						<td class="col-md-2">{{y.max}}</td>
+						<td ng-hide="me.type > 1" class="col-md-2"><button class="btn btn-block btn-primary" data-toggle="modal" data-target="#setMinMaxModal" ng-click="setMinMax(y.id, y.min, y.max)"><i class="glyphicon glyphicon-wrench"></i></td>
 					</tr>
 				</tbody>
 			
@@ -97,4 +103,37 @@
 		</div>
 	</div>
 
+</div>
+
+<!-- Change Password Modal-->
+<div class="modal fade" id="setMinMaxModal" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Raja-arvojen Asetukset:</h4>
+			</div>
+			
+			<div class="modal-body">
+				<form>
+					<div class="input-group">
+						<span class="input-group-addon">Alaraja:</span>
+						<input type="number" class="form-control" placeholder="Alaraja" ng-model="newMin">
+					</div>
+					
+					<div class="input-group">
+						<span class="input-group-addon">Yläraja:</span>
+						<input type="number" class="form-control" placeholder="Yläraja" ng-model="newMax">
+					</div>
+				</form>
+			</div>
+			
+			<div class="modal-footer">
+				<button type="button" class="btn" data-dismiss="modal">Peruuta</button>
+				<button type="button" class="btn btn-primary" ng-click="saveMinMax()">Tallenna</button>
+			</div>
+		</div>
+	</div>
 </div>

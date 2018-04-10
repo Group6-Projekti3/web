@@ -55,9 +55,9 @@
 				
 				<tbody>
 					<tr ng-repeat="x in users">
-						<td>{{x.name}}</td>
-						<td>{{getType(x.type)}}</td>
-						<td align="right">
+						<td class="col-md-6">{{x.name}}</td>
+						<td class="col-md-4">{{getType(x.type)}}</td>
+						<td class="col-md-2" align="right">
 							<button type="button" title="Muokkaa" class="btn btn-primary btn-sm"><i class="glyphicon glyphicon-wrench"></i></button>
 							<button type="button" title="Poista" class="btn btn-danger btn-sm"><i class="glyphicon glyphicon-trash"></i></button>
 						</td>
