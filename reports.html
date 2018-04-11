@@ -1,0 +1,120 @@
+<nav class="navbar navbar-inverse navbar-fixed-top">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="#/home">Hitsisofta - Group 6</a>
+		</div>
+		<div class="collapse navbar-collapse" id="myNavbar">
+			<ul class="nav navbar-nav">
+				<li><a href="#/home"><i class="glyphicon glyphicon-home"></i></a></li>
+				<li><a href="#/stats"><i class="glyphicon glyphicon-stats"></i></a></li>
+				<li><a href="#/users"><i class="glyphicon glyphicon-user"></i></a></li>
+				<li class="active"><a href="#/reports"><i class="glyphicon glyphicon-indent-right"></i></a></li>
+				<!--<li><a href="#/new"><i class="glyphicon glyphicon-plus"></i></a></li>
+				<li><a href="#/results"><i class="glyphicon glyphicon-search"></i></a></li>
+				<li><a href="#/settings"><i class="glyphicon glyphicon-cog"></i></a></li>-->
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a data-toggle="modal" data-target="#helpModal"><i class="glyphicon glyphicon-question-sign"></i></a></li>
+				<li><a href="php/logout.php"><i class="glyphicon glyphicon-log-out"></i></a></li>
+			</ul>
+		</div>
+	</div>
+</nav>
+
+<br>
+
+<div class="container" style="margin-top:50px">
+
+	<div class="well">
+		<h4>Raportit</h4><br />
+		
+		
+		<b>Valitse sensori:</b>
+		<br /><br />
+		<div class="form-group">
+			<select ng-model="sensor">
+				<option ng-repeat="x in sensors" value="{{x.id}}">{{x.name}}</option>
+			</select>
+		</div>
+		
+		<div class="form-group" ng-show="sensor > 0">
+			<br />
+			<b>Valitse aika:</b>
+			<br /><br />
+			<select class="custom-select" id="inputGroupSelect01" ng-model="timeGetOpt" ng-click="enableButton()">
+				<option value="1">Vuorokausi</option>
+				<option value="2">Viikko</option>
+				<option value="3">Kuukausi</option>
+			</select>
+		</div>
+		<br />
+		
+		<div class="input-group" ng-show="timeGetOpt > 0 && timeGetOpt < 2">
+			<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"><b>Päivämäärä:</b></i></span>
+			<input type="date" class="form-control" ng-model="starttime">
+		</div>
+		
+		<div class="form-group" ng-show="timeGetOpt > 1">
+			<b>Valitse vuosi:</b>
+			<select ng-model="year">
+				<option value="2018" selected>2018</option>
+				<option value="2017">2017</option>
+				<option value="2016">2016</option>
+				<option value="2015">2015</option>
+				<option value="2014">2014</option>
+				<option value="2013">2013</option>
+				<option value="2012">2012</option>
+				<option value="2011">2011</option>
+				<option value="2010">2010</option>
+				
+			</select>
+		</div>
+		
+		<div class="form-group" ng-show="timeGetOpt == 2">
+			<b>Viikko:</b>
+			<select ng-model="week">
+				<option ng-repeat="i in [ 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,
+					20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,
+					45,46,47,48,49,50,51,52 ]" value="{{$index+1}}">
+				{{$index+1}}
+				</option>
+			</select>
+		</div>
+		
+		<div class="form-group" ng-show="timeGetOpt == 3">
+			<b>Kuukausi:</b>
+			<select ng-model="month">
+				<option value="1">Tammikuu</option>
+				<option value="2">Helmikuu</option>
+				<option value="3">Maaliskuu</option>
+				<option value="4">Huhtikuu</option>
+				<option value="5">Toukokuu</option>
+				<option value="6">Kesäkuu</option>
+				<option value="7">Heinäkuu</option>
+				<option value="8">Elokuu</option>
+				<option value="9">Syyskuu</option>
+				<option value="10">Lokakuu</option>
+				<option value="11">Marraskuu</option>
+				<option value="12">Joulukuu</option>
+			</select>
+		</div>
+		
+		<br>
+		
+		<button ng-click="getdata()" ng-hide="hideButton" id="getButton" class="btn btn-block btn-primary">Hae graafi</button>
+		<div class="alert alert-danger" ng-hide="errorOccurred"><center>{{ errorMessage }}</center></div>
+		
+		
+		<div class="form-group" ng-hide="hideCanvas">
+			<h3>Käyrät</h3>
+			<canvas id="myChart1"></canvas>
+		</div>	
+		
+		
+	</div>
+</div>
