@@ -1,2 +1,2 @@
 # web
-web application part
+Savonia AMK Projekti 3 -kurssin ryhmätyö.
